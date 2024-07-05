@@ -1,20 +1,20 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using Koyou.Commons;
 using Koyou.Frameworks;
-using Object = UnityEngine.Object;
+using Scenes.Games;
 
 namespace Scenes.Splashes
 {
-    public class SplashAppState : AppState
+    public class SplashScene : BaseScene
     {
-        #region AppState
+        #region BaseScene
 
         public override async UniTask Enter()
         {
             await base.Enter();
             await UniTask.Delay(1000); // todo
-            var splashScene = Object.FindFirstObjectByType<SplashScene>() ?? throw new Exception("SplashScene not found");
-            await splashScene.Enter();
+            Log.N($"Called");
+            AppStateMachine.Instance.EnqueueState(new GameAppState());
         }
 
         public override async UniTask Exit()
