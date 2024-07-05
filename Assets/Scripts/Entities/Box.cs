@@ -2,7 +2,9 @@
 
 namespace Entities
 {
-    public class Box : Placement, IMovement
+    public interface IBox : IMovement { }
+
+    public class Box : Placement, IBox
     {
         #region IMovement
 
