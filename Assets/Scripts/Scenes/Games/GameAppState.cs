@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
 using UnityEngine.SceneManagement;
@@ -17,12 +18,24 @@ namespace Scenes.Games
             await SceneManager.LoadSceneAsync("Game").ToUniTask();
             Log.N($"Called");
             var scene = Object.FindFirstObjectByType<GameScene>() ?? throw new Exception($"{nameof(GameScene)} not found");
+            scene.Game = _game;
             await scene.Enter();
         }
 
         public override async UniTask Exit()
         {
             await base.Exit();
+        }
+
+        #endregion
+
+        #region GameAppState
+
+        private readonly Game _game;
+
+        public GameAppState(Game game)
+        {
+            _game = game;
         }
 
         #endregion

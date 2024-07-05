@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
 using Scenes.Games;
@@ -14,7 +15,11 @@ namespace Scenes.Splashes
             await base.Enter();
             await UniTask.Delay(1000); // todo
             Log.N($"Called");
-            AppStateMachine.Instance.EnqueueState(new GameAppState());
+
+            // todo 取缓存 level index
+            // todo 加载 Game
+            var game = new Game(new Plate(5, 7));
+            AppStateMachine.Instance.EnqueueState(new GameAppState(game));
         }
 
         public override async UniTask Exit()

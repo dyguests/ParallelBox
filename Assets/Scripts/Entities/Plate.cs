@@ -53,6 +53,14 @@ namespace Entities
 
         private ICell[,] Cells { get; }
 
+        public Plate(int width, int height) : this(new Vector2Int(width, height)) { }
+
+        public Plate(Vector2Int size)
+        {
+            Size = size;
+            Cells = new ICell[size.x, size.y];
+        }
+
         #endregion
     }
 }
