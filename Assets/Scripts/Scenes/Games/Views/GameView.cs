@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using Entities;
 using Koyou.Frameworks;
+using Scenes.Games.Views;
 using UnityEngine;
 
 namespace Scenes.Games

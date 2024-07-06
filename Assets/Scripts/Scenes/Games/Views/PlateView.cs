@@ -9,7 +9,7 @@ using Koyou.Commons;
 using Koyou.Frameworks;
 using UnityEngine;
 
-namespace Scenes.Games
+namespace Scenes.Games.Views
 {
     public class PlateView : DataView<IPlate>
     {

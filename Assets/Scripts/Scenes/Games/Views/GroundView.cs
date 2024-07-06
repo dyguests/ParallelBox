@@ -2,7 +2,7 @@
 using Entities;
 using UnityEngine;
 
-namespace Scenes.Games
+namespace Scenes.Games.Views
 {
     public class GroundView : PlacementView<IGround>
     {
