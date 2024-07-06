@@ -5,7 +5,10 @@ using Scenes.Games.Views;
 
 namespace Scenes.Games
 {
-    public interface IPlacementView { }
+    public interface IPlacementView
+    {
+        UniTask Delete();
+    }
 
     public class PlacementView<TData> : DataView<TData>, IPlacementView
         where TData : IPlacement
@@ -22,6 +25,17 @@ namespace Scenes.Games
         public override async UniTask UnloadData()
         {
             await base.UnloadData();
+        }
+
+        #endregion
+
+        #region IPlacementView
+
+        public async UniTask Delete()
+        {
+            await UnloadData();
+            PlateView = null;
+            Destroy(gameObject);
         }
 
         #endregion

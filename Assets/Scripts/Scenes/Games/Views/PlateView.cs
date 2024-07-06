@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -48,9 +47,33 @@ namespace Scenes.Games.Views
         {
             switch (placement)
             {
+                case IBox box:
+                {
+                    var placementView = await BoxView.Generate(box, this);
+                    mPlacementViews.Add(placement, placementView);
+                    break;
+                }
+                case IGoal goal:
+                {
+                    var placementView = await GoalView.Generate(goal, this);
+                    mPlacementViews.Add(placement, placementView);
+                    break;
+                }
                 case IGround ground:
                 {
                     var placementView = await GroundView.Generate(ground, this);
+                    mPlacementViews.Add(placement, placementView);
+                    break;
+                }
+                case IPlayer player:
+                {
+                    var placementView = await PlayerView.Generate(player, this);
+                    mPlacementViews.Add(placement, placementView);
+                    break;
+                }
+                case IWall wall:
+                {
+                    var placementView = await WallView.Generate(wall, this);
                     mPlacementViews.Add(placement, placementView);
                     break;
                 }
@@ -60,7 +83,9 @@ namespace Scenes.Games.Views
 
         private async UniTask RemoveItemView([NotNull] IPlacement placement)
         {
-            throw new NotImplementedException();
+            var placementView = mPlacementViews[placement];
+            mPlacementViews.Remove(placement);
+            await placementView.Delete();
         }
 
         private Matrix4x4 _pos2LocalMatrix;
