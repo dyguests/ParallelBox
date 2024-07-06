@@ -16,7 +16,7 @@ namespace Entities
     public class Game : IGame
     {
         #region IGame
-
+    
         // todo 平等世界 plates，后续还要再套一层
         public IPlate Plate { get; }
 
