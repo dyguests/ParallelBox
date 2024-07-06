@@ -19,6 +19,7 @@ namespace Scenes.Splashes
             // todo 取缓存 level index
             // todo 加载 Game
             var game = new Game(new Plate(5, 7));
+            game.Record();
             AppStateMachine.Instance.EnqueueState(new GameAppState(game));
         }
 
