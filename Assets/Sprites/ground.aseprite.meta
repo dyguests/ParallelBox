@@ -129,7 +129,7 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 16
-      height: 16
+      height: 12
     spriteID: e6939db6a60178d43b53a601499e876f
     spriteBone: []
     spriteOutline: []
@@ -147,9 +147,9 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 28
+      y: 24
       width: 16
-      height: 16
+      height: 12
     spriteID: f03ff6a2fa5475a4ea3de5ae54481bcc
     spriteBone: []
     spriteOutline: []
@@ -158,7 +158,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 28}
+    uvTransform: {x: 4, y: 24}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -174,7 +174,7 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 16
-        height: 16
+        height: 12
       spriteId: e6939db6a60178d43b53a601499e876f
     - name: ground_Frame_1
       frameIndex: 1
@@ -182,7 +182,7 @@ ScriptedImporter:
         x: 0
         y: 0
         width: 16
-        height: 16
+        height: 12
       spriteId: f03ff6a2fa5475a4ea3de5ae54481bcc
     linkedCells: []
     parentIndex: -1
@@ -225,4 +225,4 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 16, y: 16}
+  canvasSize: {x: 16, y: 20}
