@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Koyou.Commons;
 using Koyou.Recordables;
 using UnityEngine;
@@ -17,8 +18,19 @@ namespace Entities
         /// 这里是控制 Controllable Move,进而推箱子
         /// </summary>
         /// <param name="direction"></param>
+        /// <param name="splittingMovements"></param>
         /// <returns></returns>
-        bool Move(Vector2Int direction);
+        bool Move(Vector2Int direction, out List<IMovement> splittingMovements);
+
+        /// <summary>
+        /// 这里是Plate分裂的逻辑
+        ///
+        /// 若没有位置能够分裂，则返回空
+        /// 若仅能分裂一个，自身改成分裂后的状态，返回空。
+        /// 若能分裂多个，自身改成分裂后的一个状态，并返回其它分裂后的状态。
+        /// </summary>
+        /// <param name="movement"></param>
+        void Split(IMovement movement);
 
         bool Contains(Vector2Int pos);
         void Insert(Vector2Int pos, IPlacement placement);
@@ -48,7 +60,7 @@ namespace Entities
 
         public IControllable Controllable => _controllable ??= Size.GetEnumerator().SelectMany(Get).OfType<IControllable>().FirstOrDefault().RequireNotNull();
 
-        public bool Move(Vector2Int direction)
+        public bool Move(Vector2Int direction, [NotNull] out List<IMovement> splittingMovements)
         {
             var movements = new List<IMovement> { Controllable };
 
@@ -60,6 +72,7 @@ namespace Entities
                     .ToList();
                 if (nextPoses.Any(pos => !Contains(pos)))
                 {
+                    splittingMovements = new List<IMovement>();
                     return false;
                 }
 
@@ -84,11 +97,13 @@ namespace Entities
                 // 这里改成连同自己，一共只有两个movement可以移动
                 if (collides.Count > 2)
                 {
+                    splittingMovements = new List<IMovement>();
                     return false;
                 }
 
                 if (collides.Any(placement => placement is not IMovement))
                 {
+                    splittingMovements = new List<IMovement>();
                     return false;
                 }
 
@@ -96,11 +111,37 @@ namespace Entities
             }
 
             // split
-            var splittingMovements = movements.Where(movement => Get<ISplitter>(movement.Pos) != null).ToList();
-
-            // todo completed check
+            splittingMovements = movements.Where(movement => Get<ISplitter>(movement.Pos) != null).ToList();
 
             return true;
+        }
+
+        public void Split(IMovement movement)
+        {
+            var splitter = Get<ISplitter>(movement.Pos);
+            if (splitter == null) return;
+
+            var splittableDirections = splitter.GetSplitDirections()
+                .Where(direction => Get(movement.Pos + direction).None(placement => placement.Layer == movement.Layer))
+                .ToList();
+
+            // 分裂出的Plates
+            var splitPlates = new List<IPlate>();
+            for (int i = 0; i < splittableDirections.Count - 1; i++)
+            {
+                // todo
+            }
+
+
+            var enumerator = splittableDirections.GetEnumerator();
+            using (enumerator)
+            {
+                if (enumerator.MoveNext())
+                {
+                    var direction = enumerator.Current;
+                    Move(movement.Pos, movement.Pos + direction, movement);
+                }
+            }
         }
 
         public bool Contains(Vector2Int pos) => Size.Contains(pos);
@@ -157,7 +198,7 @@ namespace Entities
 
         public Plate(int width, int height) : this(new Vector2Int(width, height)) { }
 
-        public Plate(Vector2Int size)
+        private Plate(Vector2Int size)
         {
             Size = size;
             Cells = new ICell[size.x, size.y];

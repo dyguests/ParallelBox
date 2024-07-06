@@ -29,9 +29,15 @@ namespace Entities
 
         public bool Move(Vector2Int direction)
         {
-            var moved = Plate.Move(direction);
+            var moved = Plate.Move(direction, out var splittingMovements);
 
             if (!moved) return false;
+
+            // split
+            foreach (var movement in splittingMovements)
+            {
+                Plate.Split(movement);
+            }
 
             // todo completed check
 
