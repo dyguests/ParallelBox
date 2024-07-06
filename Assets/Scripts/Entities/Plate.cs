@@ -11,6 +11,8 @@ namespace Entities
     {
         Vector2Int Size { get; }
 
+        public IControllable Controllable { get; }
+
         bool Contains(Vector2Int pos);
         void Insert(Vector2Int pos, IPlacement placement);
         void Remove(Vector2Int pos, int layer);
@@ -36,6 +38,8 @@ namespace Entities
         #region IPlate
 
         public Vector2Int Size { get; }
+
+        public IControllable Controllable => _controllable ??= Size.GetEnumerator().SelectMany(Get).OfType<IControllable>().FirstOrDefault().RequireNotNull();
 
         public bool Contains(Vector2Int pos) => Size.Contains(pos);
 
@@ -86,6 +90,8 @@ namespace Entities
         #region Plate
 
         private ICell[,] Cells { get; }
+
+        private IControllable _controllable;
 
         public Plate(int width, int height) : this(new Vector2Int(width, height)) { }
 

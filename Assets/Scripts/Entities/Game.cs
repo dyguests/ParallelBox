@@ -9,7 +9,6 @@ namespace Entities
     public interface IGame
     {
         IPlate Plate { get; }
-        IControllable Controllable { get; }
 
         bool Move(Vector2Int direction);
     }
@@ -20,11 +19,10 @@ namespace Entities
 
         // todo 平等世界 plates，后续还要再套一层
         public IPlate Plate { get; }
-        public IControllable Controllable { get; }
 
         public bool Move(Vector2Int direction)
         {
-            var movements = new List<IMovement> { Controllable };
+            var movements = new List<IMovement> { Plate.Controllable };
 
             while (true)
             {
@@ -40,7 +38,7 @@ namespace Entities
                     .Select(nextPos => Plate.Get(nextPos))
                     .Where(Predicates.NotNull)
                     .SelectMany(placements => placements)
-                    .Where(placement => placement.Layer == Controllable.Layer) // 仅检查同层碰撞
+                    .Where(placement => placement.Layer == Plate.Controllable.Layer) // 仅检查同层碰撞
                     .Where(placement => !movements.Contains(placement))
                     .ToList();
                 if (!collides.Any())
@@ -75,7 +73,6 @@ namespace Entities
         public Game(IPlate plate)
         {
             Plate = plate;
-            Controllable = Plate.Size.GetEnumerator().SelectMany(Plate.Get).OfType<IControllable>().FirstOrDefault().RequireNotNull();
         }
 
         #endregion
