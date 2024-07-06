@@ -595,7 +595,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: UNITASK_SUPPORT;R3_SUPPORT
+    Standalone: UNITASK_SUPPORT;R3_SUPPORT;INPUT_ACTION
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

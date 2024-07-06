@@ -26,7 +26,9 @@ namespace Scenes.Games
 
         #region GameView
 
-        [SerializeField] private PlateView plateView;
+        [SerializeField] private GameInput gameInput;
+
+        [Space] [SerializeField] private PlateView plateView;
 
         #endregion
     }
