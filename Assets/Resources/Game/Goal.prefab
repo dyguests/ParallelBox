@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Goal
       objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: d3ec8934d8069ca40b43fc6aa468a301, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3626916397498700004, guid: d3ec8934d8069ca40b43fc6aa468a301, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 560397357
+      objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: d3ec8934d8069ca40b43fc6aa468a301, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

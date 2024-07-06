@@ -25,6 +25,7 @@ namespace Scenes.Games
             plate.Insert(new Vector2Int(2, 2), new Box());
             plate.Insert(new Vector2Int(3, 3), new Wall());
             plate.Insert(new Vector2Int(4, 2), new Goal());
+            plate.Record();
             Game = new Game(plate);
             RunSceneFlow();
 #endif
