@@ -64,7 +64,7 @@ namespace Entities
                 }
 
                 var collides = nextPoses
-                    .Select(nextPos => Get(nextPos))
+                    .Select(Get)
                     .Where(Predicates.NotNull)
                     .SelectMany(placements => placements)
                     .Where(placement => placement.Layer == Controllable.Layer) // 仅检查同层碰撞
@@ -80,6 +80,13 @@ namespace Entities
                     break;
                 }
 
+                // todo 禁用连续推多个 movement; 之后确认要不要加此功能
+                // 这里改成连同自己，一共只有两个movement可以移动
+                if (collides.Count > 2)
+                {
+                    return false;
+                }
+
                 if (collides.Any(placement => placement is not IMovement))
                 {
                     return false;
@@ -89,7 +96,7 @@ namespace Entities
             }
 
             // split
-            // movements.Where(movement => )
+            var splittingMovements = movements.Where(movement => Get<ISplitter>(movement.Pos) != null).ToList();
 
             // todo completed check
 
