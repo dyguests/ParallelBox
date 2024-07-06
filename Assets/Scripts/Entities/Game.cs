@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Entities
 {
+    // todo recordable
     public interface IGame
     {
         IPlate Plate { get; }

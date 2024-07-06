@@ -2,10 +2,9 @@
 using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
-using Scenes.Games.Views;
 using UnityEngine;
 
-namespace Scenes.Games
+namespace Scenes.Games.Views
 {
     public class GameView : DataView<IGame>
     {
@@ -14,12 +13,16 @@ namespace Scenes.Games
         public override async UniTask LoadData(IGame data)
         {
             await base.LoadData(data);
+            // todo ApplyChange isCompleted
             await plateView.LoadData(Data.Plate);
             gameInput.callback = new InputCallback(this);
+            gameInput.ActiveInput();
         }
 
         public override async UniTask UnloadData()
         {
+            gameInput.InactiveInput();
+            gameInput.callback = null;
             await plateView.UnloadData();
             await base.UnloadData();
         }

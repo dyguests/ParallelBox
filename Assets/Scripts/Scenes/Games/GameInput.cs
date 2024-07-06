@@ -13,8 +13,7 @@ namespace Scenes.Games
         {
             base.Awake();
             _gameActions = InputActions.Game;
-            // todo 暂时不禁用，后续用 ActiveInput/InactiveInput 来启用
-            // _gameActions.Disable();
+            _gameActions.Disable();
 
             _gameActions.Move.AddObserver(Move);
         }
