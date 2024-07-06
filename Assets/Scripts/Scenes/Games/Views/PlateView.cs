@@ -17,7 +17,12 @@ namespace Scenes.Games.Views
         public override async UniTask LoadData(IPlate data)
         {
             await base.LoadData(data);
-            _pos2LocalMatrix = Matrix4x4.Translate(new Vector3(-(data.Size.x - 1) / 2f, -(data.Size.y - 1) / 2f));
+            // _pos2LocalMatrix = Matrix4x4.Translate(new Vector3(-(data.Size.x - 1) / 2f, -(data.Size.y - 1) / 2f));
+            _pos2LocalMatrix = Matrix4x4.TRS(
+                new Vector3(-(data.Size.x - 1) / 2f, -(data.Size.y - 1) / 2f, 0f),
+                Quaternion.identity,
+                new Vector3(tileSize.x, tileSize.y, 1)
+            );
             await Data.Size.GetEnumerator()
                 .Select(pos => Data.Get(pos))
                 .Where(Predicates.NotNull)
@@ -40,8 +45,9 @@ namespace Scenes.Games.Views
 
         #region PlateView
 
-        private readonly Dictionary<IPlacement, IPlacementView> mPlacementViews = new();
+        [SerializeField] private Vector2 tileSize = new Vector2(1f, 12f / 16f);
 
+        private readonly Dictionary<IPlacement, IPlacementView> mPlacementViews = new();
 
         private async UniTask InsertItemView([NotNull] IPlacement placement)
         {
