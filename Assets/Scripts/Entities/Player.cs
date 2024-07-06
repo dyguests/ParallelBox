@@ -6,6 +6,12 @@ namespace Entities
 
     public class Player : Placement, IPlayer
     {
+        #region Placement
+
+        public override int Layer => 5;
+
+        #endregion
+
         #region IMovement
 
         public void Moved(Vector2Int start, Vector2Int end)

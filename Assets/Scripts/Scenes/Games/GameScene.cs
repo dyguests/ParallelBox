@@ -20,6 +20,10 @@ namespace Scenes.Games
 
             var plate = new Plate(7, 5);
             plate.Size.GetEnumerator().ForEach(pos => plate.Insert(pos, new Ground()));
+            plate.Insert(new Vector2Int(1, 1), new Player());
+            plate.Insert(new Vector2Int(2, 2), new Box());
+            plate.Insert(new Vector2Int(3, 3), new Wall());
+            plate.Insert(new Vector2Int(4, 2), new Goal());
             Game = new Game(plate);
             RunSceneFlow();
 #endif

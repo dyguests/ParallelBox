@@ -6,6 +6,12 @@ namespace Entities
 
     public class Box : Placement, IBox
     {
+        #region Placement
+
+        public override int Layer => 4;
+
+        #endregion
+
         #region IMovement
 
         public void Moved(Vector2Int start, Vector2Int end)
