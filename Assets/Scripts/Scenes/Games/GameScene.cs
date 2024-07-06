@@ -2,6 +2,7 @@
 using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
+using UnityEngine;
 
 namespace Scenes.Games
 {
@@ -30,6 +31,7 @@ namespace Scenes.Games
         {
             await base.Enter();
             Log.N($"GameScene Enter Game: {Game}");
+            
         }
 
         public override async UniTask Exit()
@@ -40,6 +42,8 @@ namespace Scenes.Games
         #endregion
 
         #region GameScene
+
+        [SerializeField] private GameView gameView;
 
         public Game Game { get; set; }
 
