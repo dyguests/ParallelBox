@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Koyou.Commons;
-using Koyou.Recordables;
+﻿using Koyou.Recordables;
 using UnityEngine;
 
 namespace Entities
@@ -32,42 +29,9 @@ namespace Entities
 
         public bool Move(Vector2Int direction)
         {
-            var movements = new List<IMovement> { Plate.Controllable };
+            var moved = Plate.Move(direction);
 
-            while (true)
-            {
-                var nextPoses = movements.Select(movement => movement.Pos)
-                    .Select(pos => pos + direction)
-                    .ToList();
-                if (nextPoses.Any(pos => !Plate.Contains(pos)))
-                {
-                    return false;
-                }
-
-                var collides = nextPoses
-                    .Select(nextPos => Plate.Get(nextPos))
-                    .Where(Predicates.NotNull)
-                    .SelectMany(placements => placements)
-                    .Where(placement => placement.Layer == Plate.Controllable.Layer) // 仅检查同层碰撞
-                    .Where(placement => !movements.Contains(placement))
-                    .ToList();
-                if (!collides.Any())
-                {
-                    foreach (var movement in movements)
-                    {
-                        Plate.Move(movement.Pos, movement.Pos + direction, movement);
-                    }
-
-                    break;
-                }
-
-                if (collides.Any(placement => placement is not IMovement))
-                {
-                    return false;
-                }
-
-                movements.AddRange(collides.Cast<IMovement>());
-            }
+            if (!moved) return false;
 
             // todo completed check
 

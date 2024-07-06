@@ -11,7 +11,14 @@ namespace Entities
     {
         Vector2Int Size { get; }
 
-        public IControllable Controllable { get; }
+        IControllable Controllable { get; }
+
+        /// <summary>
+        /// 这里是控制 Controllable Move,进而推箱子
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        bool Move(Vector2Int direction);
 
         bool Contains(Vector2Int pos);
         void Insert(Vector2Int pos, IPlacement placement);
@@ -40,6 +47,54 @@ namespace Entities
         public Vector2Int Size { get; }
 
         public IControllable Controllable => _controllable ??= Size.GetEnumerator().SelectMany(Get).OfType<IControllable>().FirstOrDefault().RequireNotNull();
+
+        public bool Move(Vector2Int direction)
+        {
+            var movements = new List<IMovement> { Controllable };
+
+            // move
+            while (true)
+            {
+                var nextPoses = movements.Select(movement => movement.Pos)
+                    .Select(pos => pos + direction)
+                    .ToList();
+                if (nextPoses.Any(pos => !Contains(pos)))
+                {
+                    return false;
+                }
+
+                var collides = nextPoses
+                    .Select(nextPos => Get(nextPos))
+                    .Where(Predicates.NotNull)
+                    .SelectMany(placements => placements)
+                    .Where(placement => placement.Layer == Controllable.Layer) // 仅检查同层碰撞
+                    .Where(placement => !movements.Contains(placement))
+                    .ToList();
+                if (!collides.Any())
+                {
+                    foreach (var movement in movements)
+                    {
+                        Move(movement.Pos, movement.Pos + direction, movement);
+                    }
+
+                    break;
+                }
+
+                if (collides.Any(placement => placement is not IMovement))
+                {
+                    return false;
+                }
+
+                movements.AddRange(collides.Cast<IMovement>());
+            }
+
+            // split
+            // movements.Where(movement => )
+
+            // todo completed check
+
+            return true;
+        }
 
         public bool Contains(Vector2Int pos) => Size.Contains(pos);
 
