@@ -8,7 +8,7 @@ namespace Entities
     {
         #region Placement
 
-        public override int Layer => 5;
+        public override int Layer => 2;
 
         #endregion
 

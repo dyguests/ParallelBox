@@ -6,7 +6,7 @@
     {
         #region Placement
 
-        public override int Layer => 2;
+        public override int Layer => 1;
 
         #endregion
     }

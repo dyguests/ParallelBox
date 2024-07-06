@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Koyou.Commons;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace Entities
 
         IEnumerable<IPlacement> Get(Vector2Int pos);
         T Get<T>(Vector2Int pos) where T : IPlacement;
+
+        void Move(Vector2Int start, Vector2Int end, IMovement movement);
     }
 
     public class Plate : IPlate
@@ -48,6 +51,24 @@ namespace Entities
 
         public IEnumerable<IPlacement> Get(Vector2Int pos) => Cells.Get(pos) ?? Enumerable.Empty<IPlacement>();
         public T Get<T>(Vector2Int pos) where T : IPlacement => Cells.Get(pos).OfType<T>().FirstOrDefault();
+
+        public void Move(Vector2Int start, Vector2Int end, IMovement movement)
+        {
+            if (!Contains(end)) throw new IndexOutOfRangeException($"Pos({end.x},{end.y}) is out of range.");
+            if (start == end) throw new InvalidOperationException($"start({start})==end({end})");
+
+            // 由于同时处理多个元素移动时，可能出现覆盖的情况。所以当前判断未被覆盖时，才走移除操作。
+            if (Cells.Get(start)?.Any(placement => placement == movement) == true)
+            {
+                Cells.Get(start).Remove(movement);
+            }
+
+            Cells.GetOrPut(end, () => new Cell()).Set(movement);
+
+            movement.Moved(start, end);
+
+            //  AddTransition(MoveTransition.From(start, end, movement));
+        }
 
         #endregion
 
