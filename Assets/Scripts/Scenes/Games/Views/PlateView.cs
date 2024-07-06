@@ -27,6 +27,7 @@ namespace Scenes.Games.Views
                 .Select(pos => Data.Get(pos))
                 .Where(Predicates.NotNull)
                 .SelectMany(placements => placements)
+                .OrderBy(placement => placement.Layer)
                 .Select(async placement => await InsertItemView(placement));
         }
 
