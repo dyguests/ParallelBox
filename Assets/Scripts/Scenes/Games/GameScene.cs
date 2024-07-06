@@ -31,11 +31,12 @@ namespace Scenes.Games
         {
             await base.Enter();
             Log.N($"GameScene Enter Game: {Game}");
-            
+            await gameView.LoadData(Game);
         }
 
         public override async UniTask Exit()
         {
+            await gameView.UnloadData();
             await base.Exit();
         }
 
