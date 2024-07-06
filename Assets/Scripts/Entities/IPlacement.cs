@@ -1,10 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Koyou.Recordables;
 using UnityEngine;
 
 namespace Entities
 {
-    public interface IPlacement
+    public interface IPlacement : IRecordable
     {
         [RecordlessField] public IPlate Plate { get; }
         Vector2Int Pos { get; set; }
@@ -18,8 +19,18 @@ namespace Entities
         void Removed();
     }
 
-    public abstract class Placement : IPlacement
+    public abstract class Placement : RecordableObject, IPlacement
     {
+        #region RecordableObject
+
+        protected static readonly Saver<Placement> PlacementSavior = new(
+            source => throw new NotImplementedException(),
+            (source, target) => { target.Pos = source.Pos; },
+            null
+        );
+
+        #endregion
+
         #region IPlacement
 
         public IPlate Plate { get; private set; }
