@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using Entities;
+using Koyou.Commons;
 using Koyou.Frameworks;
 using Scenes.Games.Views;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Scenes.Games
         {
             await base.LoadData(data);
             await plateView.LoadData(Data.Plate);
+            gameInput.callback = new InputCallback(this);
         }
 
         public override async UniTask UnloadData()
@@ -29,6 +31,35 @@ namespace Scenes.Games
         [SerializeField] private GameInput gameInput;
 
         [Space] [SerializeField] private PlateView plateView;
+
+        private class InputCallback : GameInput.ICallback
+        {
+            #region GameInput.ICallback
+
+            public void Return()
+            {
+                // todo
+            }
+
+            public void Move(Vector2Int direction)
+            {
+                var moved = _owner.Data.Move(direction);
+                Log.N($"direction: {direction}, moved: {moved}");
+            }
+
+            #endregion
+
+            #region InputCallback
+
+            private GameView _owner;
+
+            public InputCallback(GameView owner)
+            {
+                _owner = owner;
+            }
+
+            #endregion
+        }
 
         #endregion
     }

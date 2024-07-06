@@ -2,7 +2,7 @@
 
 namespace Entities
 {
-    public interface IPlayer : IMovement { }
+    public interface IPlayer : IControllable { }
 
     public class Player : Placement, IPlayer
     {

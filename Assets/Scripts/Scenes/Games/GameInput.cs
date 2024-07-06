@@ -62,7 +62,7 @@ namespace Scenes.Games
             // todo 后续处理持续移动 的逻辑
         }
 
-        public new interface ICallback
+        public new interface ICallback : CommonInput.ICallback
         {
             void Move(Vector2Int direction);
         }
