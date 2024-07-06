@@ -6,9 +6,9 @@
     {
         #region RecordableObject
 
-        protected override ISaver Savior { get; } = new Saver<Box>(
+        protected override ISaver Savior { get; } = new Saver<Ground>(
             PlacementSavior,
-            source => new Box(),
+            source => new Ground(),
             (source, target) =>
             {
                 /*target.Specie = source.Specie;*/

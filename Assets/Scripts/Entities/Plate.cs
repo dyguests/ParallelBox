@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Koyou.Commons;
+using Koyou.Recordables;
 using UnityEngine;
 
 namespace Entities
 {
-    public interface IPlate
+    public interface IPlate : IRecordable
     {
         Vector2Int Size { get; }
 
@@ -20,8 +21,18 @@ namespace Entities
         void Move(Vector2Int start, Vector2Int end, IMovement movement);
     }
 
-    public class Plate : IPlate
+    public class Plate : RecordableObject, IPlate
     {
+        #region RecordableObject
+
+        protected override ISaver Savior { get; } = new Saver<Plate>(
+            null,
+            source => new Plate(source.Size),
+            (source, target) => { source.Size.ForEach(pos => { target.Cells[pos.x, pos.y] = source.Cells[pos.x, pos.y]?.Clone(); }); },
+            source => source.Cells.Cast<ICell>());
+
+        #endregion
+
         #region IPlate
 
         public Vector2Int Size { get; }

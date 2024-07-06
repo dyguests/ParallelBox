@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Koyou.Commons;
+using Koyou.Recordables;
 using static Koyou.Commons.RequireEx;
 
 namespace Entities
 {
-    public interface ICell : /*IRecordable,*/ IEnumerable<IPlacement>, ICloneable<ICell>
+    public interface ICell : IRecordable, IEnumerable<IPlacement>, ICloneable<ICell>
     {
         void Set(IPlacement placement);
         void Remove(IPlacement placement);
@@ -18,8 +19,18 @@ namespace Entities
         bool Has(int layer);
     }
 
-    public class Cell : ICell
+    public class Cell : RecordableObject, ICell
     {
+        #region RecordableObject
+
+        protected override ISaver Savior { get; } = new Saver<Cell>(
+            source => new Cell(),
+            (source, target) => { target._map = source._map?.Let(map => new Dictionary<int, IPlacement>(map)); },
+            source => source._map?.Values
+        );
+
+        #endregion
+
         #region ICell
 
         public void Set(IPlacement placement) => RequireOrNew(ref _map)[placement.Layer] = placement;

@@ -8,9 +8,9 @@ namespace Entities
     {
         #region RecordableObject
 
-        protected override ISaver Savior { get; } = new Saver<Box>(
+        protected override ISaver Savior { get; } = new Saver<Player>(
             PlacementSavior,
-            source => new Box(),
+            source => new Player(),
             (source, target) =>
             {
                 /*target.Specie = source.Specie;*/
