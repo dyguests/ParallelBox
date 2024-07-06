@@ -36,7 +36,7 @@ namespace Entities
             // split
             foreach (var movement in splittingMovements)
             {
-                Plate.Split(movement);
+                var splitPlates = Plate.Split(movement);
             }
 
             // todo completed check

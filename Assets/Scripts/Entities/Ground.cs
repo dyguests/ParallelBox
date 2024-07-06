@@ -18,6 +18,17 @@
 
         #endregion
 
+        #region IDeepCloneable<IPlacement>
+
+        public override IPlacement DeepClone()
+        {
+            var clone = new Ground();
+            PlacementDeepClone(this, clone);
+            return clone;
+        }
+
+        #endregion
+
         #region Placement
 
         public override int Layer => 0;

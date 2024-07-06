@@ -78,5 +78,16 @@ namespace Entities
         }
 
         #endregion
+
+        #region IDeepCloneable<IPlacement>
+
+        public override IPlacement DeepClone()
+        {
+            var clone = new Splitter(Left, Up, Right, Down);
+            PlacementDeepClone(this, clone);
+            return clone;
+        }
+
+        #endregion
     }
 }

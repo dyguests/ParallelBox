@@ -8,7 +8,7 @@ using static Koyou.Commons.RequireEx;
 
 namespace Entities
 {
-    public interface ICell : IRecordable, IEnumerable<IPlacement>, ICloneable<ICell>
+    public interface ICell : IRecordable, IEnumerable<IPlacement>, ICloneable<ICell>, IDeepCloneable<ICell>
     {
         void Set(IPlacement placement);
         void Remove(IPlacement placement);
@@ -66,13 +66,36 @@ namespace Entities
 
         public ICell Clone()
         {
-            var cell = new Cell();
+            var clone = new Cell();
             if (_map != null)
             {
-                cell._map = new Dictionary<int, IPlacement>(_map);
+                clone._map = new Dictionary<int, IPlacement>();
+                foreach (var key in _map.Keys)
+                {
+                    clone._map[key] = _map[key];
+                }
             }
 
-            return cell;
+            return clone;
+        }
+
+        #endregion
+
+        #region IDeepCloneable<ICell>
+
+        public ICell DeepClone()
+        {
+            var clone = new Cell();
+            if (_map != null)
+            {
+                clone._map = new Dictionary<int, IPlacement>();
+                foreach (var key in _map.Keys)
+                {
+                    clone._map[key] = _map[key].DeepClone();
+                }
+            }
+
+            return clone;
         }
 
         #endregion

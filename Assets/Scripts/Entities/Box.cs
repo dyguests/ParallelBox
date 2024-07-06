@@ -20,12 +20,6 @@ namespace Entities
 
         #endregion
 
-        #region Placement
-
-        public override int Layer => 2;
-
-        #endregion
-
         #region IMovement
 
         public void Moved(Vector2Int start, Vector2Int end)
@@ -33,6 +27,23 @@ namespace Entities
             MovementDelegate.Moved(this, start, end);
             // todo notify
         }
+
+        #endregion
+
+        #region IDeepCloneable<IPlacement>
+
+        public override IPlacement DeepClone()
+        {
+            var clone = new Box();
+            PlacementDeepClone(this, clone);
+            return clone;
+        }
+
+        #endregion
+
+        #region Placement
+
+        public override int Layer => 2;
 
         #endregion
     }

@@ -17,6 +17,16 @@
         );
 
         #endregion
+        
+        #region IDeepCloneable<IPlacement>
+        
+        public override IPlacement DeepClone()
+        {
+            var clone = new Goal();
+            PlacementDeepClone(this, clone);
+            return clone;
+        }
+        #endregion
 
         #region Placement
 

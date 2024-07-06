@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace Entities
 {
-    public interface IPlate : IRecordable
+    public interface IPlate : IRecordable, IDeepCloneable<IPlate>
     {
         Vector2Int Size { get; }
 
-        IControllable Controllable { get; }
+        [RecordlessField] IControllable Controllable { get; }
 
         /// <summary>
         /// 这里是控制 Controllable Move,进而推箱子
@@ -24,13 +24,13 @@ namespace Entities
 
         /// <summary>
         /// 这里是Plate分裂的逻辑
-        ///
+        /// 
         /// 若没有位置能够分裂，则返回空
         /// 若仅能分裂一个，自身改成分裂后的状态，返回空。
         /// 若能分裂多个，自身改成分裂后的一个状态，并返回其它分裂后的状态。
         /// </summary>
         /// <param name="movement"></param>
-        void Split(IMovement movement);
+        List<IPlate> Split(IMovement movement);
 
         bool Contains(Vector2Int pos);
         void Insert(Vector2Int pos, IPlacement placement);
@@ -116,10 +116,10 @@ namespace Entities
             return true;
         }
 
-        public void Split(IMovement movement)
+        public List<IPlate> Split(IMovement movement)
         {
             var splitter = Get<ISplitter>(movement.Pos);
-            if (splitter == null) return;
+            if (splitter == null) return new List<IPlate>();
 
             var splittableDirections = splitter.GetSplitDirections()
                 .Where(direction => Get(movement.Pos + direction).None(placement => placement.Layer == movement.Layer))
@@ -129,9 +129,8 @@ namespace Entities
             var splitPlates = new List<IPlate>();
             for (int i = 0; i < splittableDirections.Count - 1; i++)
             {
-                // todo
+                splitPlates.Add(this.DeepClone());
             }
-
 
             var enumerator = splittableDirections.GetEnumerator();
             using (enumerator)
@@ -141,7 +140,17 @@ namespace Entities
                     var direction = enumerator.Current;
                     Move(movement.Pos, movement.Pos + direction, movement);
                 }
+
+                foreach (var splitPlate in splitPlates)
+                {
+                    Debug.Assert(enumerator.MoveNext());
+
+                    var direction = enumerator.Current;
+                    splitPlate.Move(movement.Pos, movement.Pos + direction, movement);
+                }
             }
+
+            return splitPlates;
         }
 
         public bool Contains(Vector2Int pos) => Size.Contains(pos);
@@ -186,6 +195,17 @@ namespace Entities
             movement.Moved(start, end);
 
             //  AddTransition(MoveTransition.From(start, end, movement));
+        }
+
+        #endregion
+
+        #region IDeepCloneable<IPlate>
+
+        public IPlate DeepClone()
+        {
+            var clone = new Plate(Size);
+            this.Size.ForEach(pos => { clone.Cells[pos.x, pos.y] = this.Cells[pos.x, pos.y]?.DeepClone(); });
+            return clone;
         }
 
         #endregion

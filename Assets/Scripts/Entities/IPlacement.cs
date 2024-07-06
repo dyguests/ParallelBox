@@ -1,11 +1,12 @@
 ﻿using System;
 using JetBrains.Annotations;
+using Koyou.Commons;
 using Koyou.Recordables;
 using UnityEngine;
 
 namespace Entities
 {
-    public interface IPlacement : IRecordable
+    public interface IPlacement : IRecordable, IDeepCloneable<IPlacement>
     {
         [RecordlessField] public IPlate Plate { get; }
         Vector2Int Pos { get; set; }
@@ -49,6 +50,18 @@ namespace Entities
             Plate = null;
             // todo notify
         }
+
+        #endregion
+
+        #region IDeepCloneable<IPlacement>
+
+        protected static void PlacementDeepClone(IPlacement source, IPlacement target)
+        {
+            ((Placement)target).Plate = source.Plate;
+            target.Pos = source.Pos;
+        }
+
+        public abstract IPlacement DeepClone();
 
         #endregion
     }
