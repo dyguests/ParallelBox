@@ -78,6 +78,12 @@ namespace Scenes.Games.Views
                     mPlacementViews.Add(placement, placementView);
                     break;
                 }
+                case ISplitter splitter:
+                {
+                    var placementView = await SplitterView.Generate(splitter, this);
+                    mPlacementViews.Add(placement, placementView);
+                    break;
+                }
                 case IWall wall:
                 {
                     var placementView = await WallView.Generate(wall, this);
