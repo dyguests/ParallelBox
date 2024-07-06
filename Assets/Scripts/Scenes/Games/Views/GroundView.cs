@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Entities;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace Scenes.Games
         {
             if (sPrefab == null) sPrefab = Resources.Load<GroundView>("Game/Ground");
             var instantiate = Instantiate(sPrefab, plateView.transform);
-            instantiate.name = "Cube";
+            instantiate.name = $"Ground{data.Pos}";
             instantiate.PlateView = plateView;
             await instantiate.LoadData(data);
             return instantiate;

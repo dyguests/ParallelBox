@@ -18,7 +18,9 @@ namespace Scenes.Games
                 return;
             }
 
-            Game = new Game(new Plate(5, 7));
+            var plate = new Plate(5, 7);
+            plate.Size.GetEnumerator().ForEach(pos => plate.Insert(pos, new Ground()));
+            Game = new Game(plate);
             RunSceneFlow();
 #endif
         }

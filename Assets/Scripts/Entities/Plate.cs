@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Koyou.Commons;
 using UnityEngine;
 
 namespace Entities
@@ -22,30 +23,31 @@ namespace Entities
 
         public Vector2Int Size { get; }
 
-        public bool Contains(Vector2Int pos)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Contains(Vector2Int pos) => Size.Contains(pos);
 
         public void Insert(Vector2Int pos, IPlacement placement)
         {
-            throw new NotImplementedException();
+            var cell = Cells.GetOrPut(pos, () => new Cell());
+            var lastItem = cell.Get(placement.Layer);
+            if (lastItem != null) Remove(pos, placement.Layer);
+            cell.Set(placement);
+            placement.Inserted(this, pos);
+            // AddTransition(InsertTransition.From(pos, placement));
         }
 
         public void Remove(Vector2Int pos, int layer)
         {
-            throw new NotImplementedException();
+            var cell = Cells.Get(pos);
+            if (cell == null) return;
+            var placement = cell.Get(layer);
+            if (placement == null) return;
+            cell.Remove(placement);
+            placement.Removed();
+            // AddTransition(RemoveTransition.From(pos, placement));
         }
 
-        public IEnumerable<IPlacement> Get(Vector2Int pos)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Get<T>(Vector2Int pos) where T : IPlacement
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<IPlacement> Get(Vector2Int pos) => Cells.Get(pos) ?? Enumerable.Empty<IPlacement>();
+        public T Get<T>(Vector2Int pos) where T : IPlacement => Cells.Get(pos).OfType<T>().FirstOrDefault();
 
         #endregion
 
