@@ -7,6 +7,7 @@ using Entities;
 using JetBrains.Annotations;
 using Koyou.Commons;
 using Koyou.Frameworks;
+using UnityEngine;
 
 namespace Scenes.Games
 {
@@ -17,6 +18,7 @@ namespace Scenes.Games
         public override async UniTask LoadData(IPlate data)
         {
             await base.LoadData(data);
+            _pos2LocalMatrix = Matrix4x4.Translate(new Vector3(-(data.Size.x - 1) / 2f, -(data.Size.y - 1) / 2f));
             await Data.Size.GetEnumerator()
                 .Select(pos => Data.Get(pos))
                 .Where(Predicates.NotNull)
@@ -31,6 +33,7 @@ namespace Scenes.Games
                 .Where(Predicates.NotNull)
                 .SelectMany(placements => placements)
                 .Select(async placement => await RemoveItemView(placement));
+            _pos2LocalMatrix = default;
             await base.UnloadData();
         }
 
@@ -59,6 +62,10 @@ namespace Scenes.Games
         {
             throw new NotImplementedException();
         }
+
+        private Matrix4x4 _pos2LocalMatrix;
+
+        public Vector3 Pos2Local(IPlacement placement) => _pos2LocalMatrix.MultiplyPoint((Vector2)placement.Pos);
 
         #endregion
     }
