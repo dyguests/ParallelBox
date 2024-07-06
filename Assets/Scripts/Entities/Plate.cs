@@ -118,7 +118,8 @@ namespace Entities
 
         public List<IPlate> Split(IMovement movement)
         {
-            var splitter = Get<ISplitter>(movement.Pos);
+            var startPos = movement.Pos;
+            var splitter = Get<ISplitter>(startPos);
             if (splitter == null) return new List<IPlate>();
 
             var splittableDirections = splitter.GetSplitDirections()
@@ -138,15 +139,18 @@ namespace Entities
                 if (enumerator.MoveNext())
                 {
                     var direction = enumerator.Current;
-                    Move(movement.Pos, movement.Pos + direction, movement);
+                    Move(startPos, startPos + direction, movement);
                 }
 
                 foreach (var splitPlate in splitPlates)
                 {
                     Debug.Assert(enumerator.MoveNext());
 
+                    var splitMovement = splitPlate.Get<IMovement>(startPos);
+                    Debug.Assert(splitMovement != null);
+                    
                     var direction = enumerator.Current;
-                    splitPlate.Move(movement.Pos, movement.Pos + direction, movement);
+                    splitPlate.Move(startPos, startPos + direction, splitMovement);
                 }
             }
 
