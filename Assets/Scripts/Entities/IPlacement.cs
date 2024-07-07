@@ -35,7 +35,11 @@ namespace Entities
 
         protected static readonly Saver<Placement> PlacementSavior = new(
             source => throw new NotImplementedException(),
-            (source, target) => { target.Pos = source.Pos; },
+            (source, target) =>
+            {
+                target.Pos = source.Pos;
+                target.Ratio = source.Ratio;
+            },
             null
         );
 
@@ -74,8 +78,8 @@ namespace Entities
         protected static void PlacementSplitClone(IPlacement source, IPlacement target, int count)
         {
             ((Placement)target).Plate = source.Plate;
-            target.Ratio = source.Ratio.Split(count);
             target.Pos = source.Pos;
+            target.Ratio = source.Ratio.Split(count);
         }
 
         public abstract IPlacement SplitClone(int count);
