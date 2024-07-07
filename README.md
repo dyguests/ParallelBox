@@ -12,6 +12,7 @@ git clone --recurse-submodules git@github.com:dyguests/ParallelBox.git
 
 - [ ] undo/redo.
 - [ ] sync input, async ui.
+- [ ] split/combine
 
 # Reference
 

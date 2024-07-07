@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Entities;
 using JetBrains.Annotations;
@@ -6,6 +7,7 @@ using Koyou.Frameworks;
 using Koyou.Recordables;
 using Scenes.Games.Views;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Scenes.Games
 {
@@ -50,6 +52,8 @@ namespace Scenes.Games
 
         [SerializeField] [CanBeNull] private SpriteRenderer sr;
 
+        [SerializeField] [CanBeNull] private Text ratioTExt;
+
         protected PlateView PlateView { get; set; }
 
         private void ApplyChange(TData previous, TData current, List<ITransition> transitions)
@@ -58,6 +62,20 @@ namespace Scenes.Games
             if (sr != null)
             {
                 sr.sortingOrder = Mathf.CeilToInt(-localPosition.y * 10);
+            }
+
+            if (ratioTExt != null)
+            {
+                var ratio = current.Ratio;
+                if (Math.Abs(ratio.Value - 1) < 0.001f)
+                {
+                    ratioTExt.enabled = false;
+                }
+                else
+                {
+                    ratioTExt.text = $"{ratio.molecule}/{ratio.letter}";
+                    ratioTExt.enabled = true;
+                }
             }
 
             // todo 动画
