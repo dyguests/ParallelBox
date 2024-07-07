@@ -174,27 +174,46 @@ namespace Entities
                 splitPlates.Add(this.SplitClone(splitCount));
             }
 
-            var enumerator = splittableDirections.GetEnumerator();
-            using (enumerator)
+            if (splittableDirections.Count > 0)
             {
-                if (enumerator.MoveNext())
-                {
-                    var direction = enumerator.Current;
-                    Move(startPos, startPos + direction, movement);
-                    Splitted(splitCount);
-                }
-
-                foreach (var splitPlate in splitPlates)
-                {
-                    Debug.Assert(enumerator.MoveNext());
-
-                    var splitMovement = splitPlate.Get<IMovement>(startPos);
-                    Debug.Assert(splitMovement != null);
-
-                    var direction = enumerator.Current;
-                    splitPlate.Move(startPos, startPos + direction, splitMovement);
-                }
+                var direction = splittableDirections[0];
+                Move(startPos, startPos + direction, movement);
+                Splitted(splitCount);
             }
+
+            for (var i = 0; i < splitCount - 1; i++)
+            {
+                var splitPlate = splitPlates[i];
+
+                var splitMovement = splitPlate.Get<IMovement>(startPos);
+                Debug.Assert(splitMovement != null);
+
+                var direction = splittableDirections[i + 1];
+                splitPlate.Move(startPos, startPos + direction, splitMovement);
+            }
+
+            // todo 这种写法，导出win应用程序后有问题，暂时换用上面的方法
+            // var enumerator = splittableDirections.GetEnumerator();
+            // using (enumerator)
+            // {
+            //     if (enumerator.MoveNext())
+            //     {
+            //         var direction = enumerator.Current;
+            //         Move(startPos, startPos + direction, movement);
+            //         Splitted(splitCount);
+            //     }
+            //
+            //     foreach (var splitPlate in splitPlates)
+            //     {
+            //         Debug.Assert(enumerator.MoveNext());
+            //
+            //         var splitMovement = splitPlate.Get<IMovement>(startPos);
+            //         Debug.Assert(splitMovement != null);
+            //
+            //         var direction = enumerator.Current;
+            //         splitPlate.Move(startPos, startPos + direction, splitMovement);
+            //     }
+            // }
 
             return splitPlates;
         }

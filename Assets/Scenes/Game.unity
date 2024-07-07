@@ -1028,6 +1028,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LogGui
       objectReference: {fileID: 0}
+    - target: {fileID: 5525414233514511134, guid: 511b044a76c6e214fa4de8ec88daca84, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
