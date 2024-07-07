@@ -19,6 +19,8 @@ namespace Scenes.Games.Views
             await base.LoadData(data);
             _disperser = Data.Collect<IGame>(async (game, current, list) => await ApplyChange(game, current, list));
 
+            await uiView.LoadData(Data);
+
             PlateViewport.Id = 0;
             foreach (var plate in Data.Plates)
             {
@@ -41,6 +43,8 @@ namespace Scenes.Games.Views
 
             PlateViewport.Id = 0;
 
+            await uiView.UnloadData();
+
             _disperser.Disperse();
             await base.UnloadData();
         }
@@ -50,6 +54,8 @@ namespace Scenes.Games.Views
         #region GameView
 
         [SerializeField] private GameInput gameInput;
+
+        [Space] [SerializeField] private UiView uiView;
 
         private readonly Dictionary<IPlate, PlateViewport> _plateViewports = new();
 
@@ -125,7 +131,7 @@ namespace Scenes.Games.Views
 
             #region InputCallback
 
-            private GameView _owner;
+            private readonly GameView _owner;
 
             public InputCallback(GameView owner)
             {
