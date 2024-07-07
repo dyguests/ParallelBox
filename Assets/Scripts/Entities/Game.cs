@@ -61,6 +61,8 @@ namespace Entities
                     }
 
                     // todo 递归： 1分2，2分4，4分8
+                    // todo 先break;暂时只考虑分裂一次
+                    break;
                 }
             }
 

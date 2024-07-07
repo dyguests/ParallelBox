@@ -140,9 +140,11 @@ namespace Entities
                 .Where(direction => Get(movement.Pos + direction).None(placement => placement.Layer == movement.Layer))
                 .ToList();
 
+            var splitCount = splittableDirections.Count;
+
             // 分裂出的Plates
             var splitPlates = new List<IPlate>();
-            for (int i = 0; i < splittableDirections.Count - 1; i++)
+            for (var i = 0; i < splitCount - 1; i++)
             {
                 splitPlates.Add(this.DeepClone());
             }
