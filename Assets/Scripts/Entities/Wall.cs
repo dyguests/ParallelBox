@@ -34,5 +34,11 @@
         public override int Layer => 2;
 
         #endregion
+
+        #region Wall
+
+        public Wall(Ratio ratio = default) : base(ratio) { }
+
+        #endregion
     }
 }

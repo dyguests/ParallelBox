@@ -17,20 +17,27 @@
         );
 
         #endregion
-        
+
         #region IDeepCloneable<IPlacement>
-        
+
         public override IPlacement SplitClone(int count)
         {
             var clone = new Goal();
-            PlacementSplitClone(this, clone,count);
+            PlacementSplitClone(this, clone, count);
             return clone;
         }
+
         #endregion
 
         #region Placement
 
         public override int Layer => 1;
+
+        #endregion
+
+        #region Goal
+
+        public Goal(Ratio ratio = default) : base(ratio) { }
 
         #endregion
     }

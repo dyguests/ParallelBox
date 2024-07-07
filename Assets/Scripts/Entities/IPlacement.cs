@@ -38,6 +38,7 @@ namespace Entities
             (source, target) =>
             {
                 target.Pos = source.Pos;
+                // todo 这个是否在 Creator 中设值？，是否会重复？
                 target.Ratio = source.Ratio;
             },
             null
@@ -69,6 +70,21 @@ namespace Entities
         public void Splitted(int count)
         {
             Ratio = Ratio.Split(count);
+        }
+
+        #endregion
+
+        #region Placement
+
+        protected Placement(Ratio ratio)
+        {
+            // if default
+            if (ratio.molecule == 0 || ratio.letter == 0)
+            {
+                ratio = new Ratio(1, 1, true);
+            }
+
+            Ratio = ratio;
         }
 
         #endregion

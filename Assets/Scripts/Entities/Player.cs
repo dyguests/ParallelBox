@@ -45,16 +45,7 @@ namespace Entities
 
         public override int Layer => 2;
 
-        public Player(Ratio ratio = default)
-        {
-            // if default
-            if (ratio.molecule == 0 || ratio.letter == 0)
-            {
-                ratio = new Ratio(1, 1, true);
-            }
-
-            Ratio = ratio;
-        }
+        public Player(Ratio ratio = default) : base(ratio) { }
 
         #endregion
     }

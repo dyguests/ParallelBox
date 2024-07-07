@@ -63,7 +63,7 @@ namespace Entities
 
         // todo 可以用 0~8来包含所有的分裂方向；及Vector2Int的八个方向，加上zero共九个方向，例如zero为4方向均分裂，up为上左右均分裂，one为上右分裂。
 
-        public Splitter(bool left, bool up, bool right, bool down)
+        public Splitter(bool left, bool up, bool right, bool down) : base(default)
         {
             Left = left;
             Up = up;

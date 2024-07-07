@@ -34,5 +34,11 @@
         public override int Layer => 0;
 
         #endregion
+
+        #region Ground
+
+        public Ground(Ratio ratio = default) : base(ratio) { }
+
+        #endregion
     }
 }

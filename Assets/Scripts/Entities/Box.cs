@@ -46,5 +46,11 @@ namespace Entities
         public override int Layer => 2;
 
         #endregion
+
+        #region Box
+
+        public Box(Ratio ratio = default) : base(ratio) { }
+
+        #endregion
     }
 }
