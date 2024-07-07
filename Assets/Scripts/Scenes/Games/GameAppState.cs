@@ -31,9 +31,9 @@ namespace Scenes.Games
 
         #region GameAppState
 
-        private readonly Game _game;
+        private readonly IGame _game;
 
-        public GameAppState(Game game)
+        public GameAppState(IGame game)
         {
             _game = game;
         }

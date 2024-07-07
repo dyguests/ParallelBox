@@ -2,6 +2,7 @@
 using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
+using Repositories;
 using Scenes.Games.Views;
 using UnityEngine;
 
@@ -19,15 +20,7 @@ namespace Scenes.Games
                 return;
             }
 
-            var plate = new Plate(7, 5);
-            plate.Size.GetEnumerator().ForEach(pos => plate.Insert(pos, new Ground()));
-            plate.Insert(new Vector2Int(1, 1), new Player());
-            plate.Insert(new Vector2Int(2, 2), new Box());
-            plate.Insert(new Vector2Int(3, 1), new Splitter(false, true, false, true));
-            plate.Insert(new Vector2Int(3, 3), new Wall());
-            plate.Insert(new Vector2Int(4, 2), new Goal());
-            Game = new Game(plate);
-            Game.Record();
+            Game = GameDatas.GetLevel(0);
             RunSceneFlow();
 #endif
         }
@@ -55,7 +48,7 @@ namespace Scenes.Games
 
         [SerializeField] private GameView gameView;
 
-        public Game Game { get; set; }
+        public IGame Game { get; set; }
 
         #endregion
     }

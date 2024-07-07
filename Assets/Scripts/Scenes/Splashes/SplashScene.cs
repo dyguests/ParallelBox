@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
-using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
+using Repositories;
 using Scenes.Games;
 
 namespace Scenes.Splashes
@@ -16,10 +16,8 @@ namespace Scenes.Splashes
             await UniTask.Delay(1000); // todo
             Log.N($"Called");
 
-            // todo 取缓存 level index
-            // todo 加载 Game
-            var game = new Game(new Plate(5, 7));
-            game.Record();
+            var index = GamePrefs.CurrentLevelIndex;
+            var game = GameDatas.GetLevel(index);
             AppStateMachine.Instance.EnqueueState(new GameAppState(game));
         }
 
