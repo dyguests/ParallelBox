@@ -56,7 +56,7 @@ namespace Repositories
         {
             var plate = new Plate(7, 5);
             plate.Size.GetEnumerator().ForEach(pos => plate.Insert(pos, new Ground()));
-            plate.Insert(new Vector2Int(1, 1), new Player());
+            plate.Insert(new Vector2Int(1, 1), new Player(new Ratio(1, 1, false)));
             plate.Insert(new Vector2Int(1, 2), new Box(new Ratio(1, 1, false)));
             plate.Insert(new Vector2Int(1, 3), new Splitter(true, false, true, false));
             plate.Insert(new Vector2Int(4, 2), new Ground(new Ratio(1, 2, true)));
