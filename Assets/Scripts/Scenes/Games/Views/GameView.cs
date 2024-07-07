@@ -19,6 +19,7 @@ namespace Scenes.Games.Views
             await base.LoadData(data);
             _disperser = Data.Collect<IGame>(ApplyChange);
 
+            PlateViewport.Id = 0;
             foreach (var plate in Data.Plates)
             {
                 await InsertPlateViewport(plate);
@@ -37,6 +38,7 @@ namespace Scenes.Games.Views
             {
                 await RemovePlateViewport(plate);
             }
+            PlateViewport.Id = 0;
 
             _disperser.Disperse();
             await base.UnloadData();

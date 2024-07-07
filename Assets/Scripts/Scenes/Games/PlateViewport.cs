@@ -14,13 +14,18 @@ namespace Scenes.Games
         /// <summary>
         /// 仅用于在Hierarchy中区分不同的PlateViewport
         /// </summary>
-        private static long sId;
+        public static long Id;
 
         public static async UniTask<PlateViewport> Generate(IPlate data, GameView gameView)
         {
             if (sPrefab == null) sPrefab = Resources.Load<PlateViewport>("Game/PlateViewport");
-            var instantiate = Instantiate(sPrefab);
-            instantiate.name = $"PlateViewport{sId++}";
+            var instantiate = Instantiate(
+                sPrefab,
+                // ReSharper disable once PossibleLossOfFraction
+                new Vector3((Id % 255) * 100, (Id / 255) * 100, 0),
+                Quaternion.identity
+            );
+            instantiate.name = $"PlateViewport{Id++}";
             instantiate.GameView = gameView;
             await instantiate.LoadData(data);
             return instantiate;

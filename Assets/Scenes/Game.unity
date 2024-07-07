@@ -326,7 +326,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameInput: {fileID: 1262033604}
-  plateView: {fileID: 0}
 --- !u!114 &1262033604
 MonoBehaviour:
   m_ObjectHideFlags: 0
