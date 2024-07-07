@@ -35,6 +35,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""99f8f6b5-2455-4c6e-9831-7aa14cbb3265"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa004f07-c90f-41c9-a493-9207ba526f85"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -191,6 +211,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         // Game
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_Move = m_Game.FindAction("Move", throwIfNotFound: true);
+        m_Game_Restart = m_Game.FindAction("Restart", throwIfNotFound: true);
         // Workshop
         m_Workshop = asset.FindActionMap("Workshop", throwIfNotFound: true);
         m_Workshop_Look = m_Workshop.FindAction("Look", throwIfNotFound: true);
@@ -258,11 +279,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Game;
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_Move;
+    private readonly InputAction m_Game_Restart;
     public struct GameActions
     {
         private @InputActions m_Wrapper;
         public GameActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Game_Move;
+        public InputAction @Restart => m_Wrapper.m_Game_Restart;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -275,6 +298,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Restart.started += instance.OnRestart;
+            @Restart.performed += instance.OnRestart;
+            @Restart.canceled += instance.OnRestart;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -282,6 +308,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Restart.started -= instance.OnRestart;
+            @Restart.performed -= instance.OnRestart;
+            @Restart.canceled -= instance.OnRestart;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -364,6 +393,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     public interface IGameActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
     public interface IWorkshopActions
     {

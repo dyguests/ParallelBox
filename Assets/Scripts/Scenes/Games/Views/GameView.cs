@@ -144,6 +144,13 @@ namespace Scenes.Games.Views
                 Log.N($"direction: {direction}, moved: {moved}");
             }
 
+            public void Restart()
+            {
+                var index = GamePrefs.CurrentLevelIndex;
+                var game = GameDatas.GetLevel(index);
+                AppStateMachine.Instance.EnqueueState(new GameAppState(game));
+            }
+
             #endregion
 
             #region InputCallback

@@ -16,6 +16,7 @@ namespace Scenes.Games
             _gameActions.Disable();
 
             _gameActions.Move.AddObserver(Move);
+            _gameActions.Restart.AddObserver(Restart);
         }
 
         #endregion
@@ -61,9 +62,18 @@ namespace Scenes.Games
             // todo 后续处理持续移动 的逻辑
         }
 
+        private void Restart(InputAction.CallbackContext ctx)
+        {
+            if (ctx.phase == InputActionPhase.Performed)
+            {
+                callback?.Restart();
+            }
+        }
+
         public new interface ICallback : CommonInput.ICallback
         {
             void Move(Vector2Int direction);
+            void Restart();
         }
 
         #endregion
