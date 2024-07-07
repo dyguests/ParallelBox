@@ -1,11 +1,12 @@
-﻿using Koyou.Recordables;
+﻿using System.Collections.Generic;
+using Koyou.Recordables;
 using UnityEngine;
 
 namespace Entities
 {
     public interface IGame : IRecordable
     {
-        IPlate Plate { get; }
+        List<IPlate> Plates { get; }
 
         bool Move(Vector2Int direction);
     }
@@ -16,28 +17,40 @@ namespace Entities
 
         protected override ISaver Savior { get; } = new Saver<Game>(
             null,
-            source => new Game(source.Plate),
-            (source, target) => { },
-            source => new[] { source.Plate });
+            source => new Game(),
+            (source, target) => { target.Plates.AddRange(source.Plates); },
+            source => source.Plates
+        );
 
         #endregion
 
         #region IGame
 
-        // todo 平等世界 plates，后续还要再套一层
-        public IPlate Plate { get; }
+        public List<IPlate> Plates { get; } = new List<IPlate>();
 
         public bool Move(Vector2Int direction)
         {
-            var moved = Plate.Move(direction, out var splittingMovements);
-
-            if (!moved) return false;
-
-            // split
-            foreach (var movement in splittingMovements)
+            var anyMoved = false;
+            foreach (var plate in Plates)
             {
-                var splitPlates = Plate.Split(movement);
+                var moved = plate.Move(direction, out var splittingMovements);
+
+                if (!moved) continue;
+                anyMoved = true;
+
+                // split
+                foreach (var movement in splittingMovements)
+                {
+                    var splitPlates = plate.Split(movement);
+
+                    // todo 添加多个，还有UI
+                    // todo 添加多个，还有UI
+                    // todo 添加多个，还有UI
+                    // todo 添加多个，还有UI
+                }
             }
+
+            if (!anyMoved) return false;
 
             // todo completed check
 
@@ -52,8 +65,10 @@ namespace Entities
 
         public Game(IPlate plate)
         {
-            Plate = plate;
+            Plates.Add(plate);
         }
+
+        private Game() { }
 
         #endregion
     }

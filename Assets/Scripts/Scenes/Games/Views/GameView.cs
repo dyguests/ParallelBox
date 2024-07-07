@@ -14,7 +14,7 @@ namespace Scenes.Games.Views
         {
             await base.LoadData(data);
             // todo ApplyChange isCompleted
-            await plateView.LoadData(Data.Plate);
+            await plateView.LoadData(Data.Plates[0] /*todo 之后改成兼容多个*/);
             gameInput.callback = new InputCallback(this);
             gameInput.ActiveInput();
         }
