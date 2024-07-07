@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: 8576c7f6410607744ba2a23be7e8413d, type: 3}
       propertyPath: m_SortingLayer
-      value: -1
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: 8576c7f6410607744ba2a23be7e8413d, type: 3}
       propertyPath: m_SortingLayerID
@@ -85,3 +85,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd26976289ab457f89872b8dd0a4f387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sr: {fileID: 5978457919128460551}
+--- !u!212 &5978457919128460551 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3626916397498700004, guid: 8576c7f6410607744ba2a23be7e8413d, type: 3}
+  m_PrefabInstance: {fileID: 6963368707065564643}
+  m_PrefabAsset: {fileID: 0}

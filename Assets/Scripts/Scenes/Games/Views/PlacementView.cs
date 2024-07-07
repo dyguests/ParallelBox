@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Entities;
+using JetBrains.Annotations;
 using Koyou.Frameworks;
 using Koyou.Recordables;
 using Scenes.Games.Views;
+using UnityEngine;
 
 namespace Scenes.Games
 {
@@ -46,12 +48,20 @@ namespace Scenes.Games
 
         #region PlacementView<TData>
 
+        [SerializeField] [CanBeNull] private SpriteRenderer sr;
+
         protected PlateView PlateView { get; set; }
 
         private void ApplyChange(TData previous, TData current, List<ITransition> transitions)
         {
+            var localPosition = PlateView.Pos2Local(current);
+            if (sr != null)
+            {
+                sr.sortingOrder = Mathf.CeilToInt(-localPosition.y * 10);
+            }
+
             // todo 动画
-            transform.localPosition = PlateView.Pos2Local(current);
+            transform.localPosition = localPosition;
         }
 
         #endregion

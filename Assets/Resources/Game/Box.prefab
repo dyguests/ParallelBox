@@ -77,3 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ae23ec5996e47feb6eef4cc04127378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sr: {fileID: 6629312427401254970}
+--- !u!212 &6629312427401254970 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 3626916397498700004, guid: 2b37fc13d6c9d9b41b2eb79b3785a3de, type: 3}
+  m_PrefabInstance: {fileID: 7950376957171370206}
+  m_PrefabAsset: {fileID: 0}

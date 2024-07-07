@@ -20,7 +20,8 @@ namespace Scenes.Games
                 return;
             }
 
-            Game = GameDatas.GetLevel(0);
+            var index = GamePrefs.CurrentLevelIndex;
+            Game = GameDatas.GetLevel(index);
             RunSceneFlow();
 #endif
         }
