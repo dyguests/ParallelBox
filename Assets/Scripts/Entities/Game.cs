@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Koyou.Recordables;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Entities
         public bool Move(Vector2Int direction)
         {
             var anyMoved = false;
-            foreach (var plate in Plates)
+            foreach (var plate in Plates.ToArray())
             {
                 var moved = plate.Move(direction, out var splittingMovements);
 
@@ -42,11 +43,13 @@ namespace Entities
                 foreach (var movement in splittingMovements)
                 {
                     var splitPlates = plate.Split(movement);
+                    if (splitPlates.Any())
+                    {
+                        Plates.AddRange(splitPlates);
+                        AddTransition(new AddPlatesTransition(splitPlates));
+                    }
 
-                    // todo 添加多个，还有UI
-                    // todo 添加多个，还有UI
-                    // todo 添加多个，还有UI
-                    // todo 添加多个，还有UI
+                    // todo 递归： 1分2，2分4，4分8
                 }
             }
 
@@ -69,6 +72,16 @@ namespace Entities
         }
 
         private Game() { }
+
+        public class AddPlatesTransition : ITransition
+        {
+            public List<IPlate> Plates { get; }
+
+            public AddPlatesTransition(List<IPlate> plates)
+            {
+                Plates = plates;
+            }
+        }
 
         #endregion
     }

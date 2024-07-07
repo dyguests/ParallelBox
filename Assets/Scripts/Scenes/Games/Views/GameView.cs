@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
+using Koyou.Recordables;
 using UnityEngine;
 
 namespace Scenes.Games.Views
@@ -11,10 +12,12 @@ namespace Scenes.Games.Views
     {
         #region DataView<IGame>
 
+        private IDisperser _disperser;
+
         public override async UniTask LoadData(IGame data)
         {
             await base.LoadData(data);
-            // todo ApplyChange isCompleted
+            _disperser = Data.Collect<IGame>(ApplyChange);
 
             foreach (var plate in Data.Plates)
             {
@@ -35,6 +38,7 @@ namespace Scenes.Games.Views
                 await RemovePlateViewport(plate);
             }
 
+            _disperser.Disperse();
             await base.UnloadData();
         }
 
@@ -45,6 +49,30 @@ namespace Scenes.Games.Views
         [SerializeField] private GameInput gameInput;
 
         private readonly Dictionary<IPlate, PlateViewport> _plateViewports = new();
+
+        private void ApplyChange(IGame previous, IGame current, List<ITransition> transitions)
+        {
+            if (transitions != null)
+            {
+                foreach (var transition in transitions)
+                {
+                    switch (transition)
+                    {
+                        case Game.AddPlatesTransition addPlatesTransition:
+                        {
+                            foreach (var plate in addPlatesTransition.Plates)
+                            {
+                                InsertPlateViewport(plate).Forget();
+                            }
+
+                            break;
+                        }
+                        default: break;
+                    }
+                }
+            }
+        }
+
 
         private async UniTask InsertPlateViewport(IPlate plate)
         {

@@ -31,6 +31,7 @@ namespace Scenes.Games
         public override async UniTask LoadData(IPlate data)
         {
             await base.LoadData(data);
+            // todo camera scale
             await plateView.LoadData(data);
         }
 
