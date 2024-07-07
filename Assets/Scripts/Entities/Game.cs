@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Koyou.Commons;
 using Koyou.Recordables;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Entities
 {
     public interface IGame : IRecordable
     {
+        bool IsCompleted { get; }
+
         List<IPlate> Plates { get; }
 
         bool Move(Vector2Int direction);
@@ -19,7 +22,11 @@ namespace Entities
         protected override ISaver Savior { get; } = new Saver<Game>(
             null,
             source => new Game(),
-            (source, target) => { target.Plates.AddRange(source.Plates); },
+            (source, target) =>
+            {
+                ((Game)target).IsCompleted = source.IsCompleted;
+                target.Plates.AddRange(source.Plates);
+            },
             source => source.Plates
         );
 
@@ -27,10 +34,14 @@ namespace Entities
 
         #region IGame
 
-        public List<IPlate> Plates { get; } = new List<IPlate>();
+        public bool IsCompleted { get; private set; }
+        public List<IPlate> Plates { get; } = new();
 
         public bool Move(Vector2Int direction)
         {
+            // 若已通关，禁用操作
+            if (IsCompleted) return false;
+
             var anyMoved = false;
             foreach (var plate in Plates.ToArray())
             {
@@ -55,7 +66,13 @@ namespace Entities
 
             if (!anyMoved) return false;
 
-            // todo completed check
+            var plates = Plates.ToArray();
+
+            if (plates.Any(plate => plate.IsCompleted))
+            {
+                IsCompleted = true;
+                AddTransition(CompletedTransition.Instance);
+            }
 
             Record();
 
@@ -82,6 +99,8 @@ namespace Entities
                 Plates = plates;
             }
         }
+
+        public class CompletedTransition : Singleton<CompletedTransition>, ITransition { }
 
         #endregion
     }

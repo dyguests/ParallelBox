@@ -14,6 +14,8 @@ namespace Entities
 
         [RecordlessField] IControllable Controllable { get; }
 
+        bool IsCompleted { get; }
+
         /// <summary>
         /// 这里是控制 Controllable Move,进而推箱子
         /// </summary>
@@ -59,6 +61,18 @@ namespace Entities
         public Vector2Int Size { get; }
 
         public IControllable Controllable => _controllable ??= Size.GetEnumerator().SelectMany(Get).OfType<IControllable>().FirstOrDefault().RequireNotNull();
+
+        public bool IsCompleted => Size.GetEnumerator()
+            .Select(Get)
+            .Where(Predicates.NotNull)
+            .All(placements =>
+            {
+                var array = placements.ToArray();
+                var goal = array.OfType<IGoal>().FirstOrDefault();
+                if (goal == null) return true;
+                var box = array.OfType<IBox>().FirstOrDefault();
+                return box != null;
+            });
 
         public bool Move(Vector2Int direction, [NotNull] out List<IMovement> splittingMovements)
         {
@@ -148,7 +162,7 @@ namespace Entities
 
                     var splitMovement = splitPlate.Get<IMovement>(startPos);
                     Debug.Assert(splitMovement != null);
-                    
+
                     var direction = enumerator.Current;
                     splitPlate.Move(startPos, startPos + direction, splitMovement);
                 }
