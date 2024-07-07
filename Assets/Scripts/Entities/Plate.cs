@@ -90,6 +90,25 @@ namespace Entities
                     return false;
                 }
 
+                // movement.ratio <= ground.ratio, pass
+                // movement.ratio >= wall.ratio, pass
+                if (!movements.All(movement =>
+                    {
+                        var nextGround = Get<IGround>(movement.Pos + direction);
+                        if (nextGround == null) return false;
+                        if (movement.Ratio.Value > nextGround.Ratio.Value) return false;
+
+                        var nextWall = Get<IWall>(movement.Pos + direction);
+                        if (nextWall == null) return true;
+                        if (movement.Ratio.Value <= nextWall.Ratio.Value) return false;
+
+                        return true;
+                    }))
+                {
+                    splittingMovements = new List<IMovement>();
+                    return false;
+                }
+
                 var collides = nextPoses
                     .Select(Get)
                     .Where(Predicates.NotNull)
