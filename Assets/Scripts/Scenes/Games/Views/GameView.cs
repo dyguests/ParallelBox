@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
 using Koyou.Recordables;
+using Repositories;
 using UnityEngine;
 
 namespace Scenes.Games.Views
@@ -61,6 +63,21 @@ namespace Scenes.Games.Views
 
         private async UniTask ApplyChange(IGame previous, IGame current, List<ITransition> transitions)
         {
+            if (transitions != null)
+            {
+                var hasCompleted = transitions.Any(transition => transition is Game.CompletedTransition);
+                if (hasCompleted)
+                {
+                    var nextLevelIndex = (GamePrefs.CurrentLevelIndex + 1) % GameDatas.Count;
+                    GamePrefs.CurrentLevelIndex = nextLevelIndex;
+                    var index = nextLevelIndex;
+                    var game = GameDatas.GetLevel(index);
+                    await UniTask.Delay(2000);
+                    AppStateMachine.Instance.EnqueueState(new GameAppState(game));
+                    return;
+                }
+            }
+
             var hasViewportChanged = false;
             foreach (var transition in transitions ?? new List<ITransition>())
             {

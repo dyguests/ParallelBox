@@ -9,7 +9,7 @@ namespace Repositories
     /// </summary>
     public class GameDatas
     {
-        public const int Count = 5;
+        public const int Count = 1;
 
         public static IGame GetLevel(int index)
         {
