@@ -25,6 +25,7 @@ namespace Entities
             (source, target) =>
             {
                 ((Game)target).IsCompleted = source.IsCompleted;
+                target.Plates.Clear();
                 target.Plates.AddRange(source.Plates);
             },
             source => source.Plates
