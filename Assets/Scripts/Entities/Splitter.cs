@@ -81,10 +81,10 @@ namespace Entities
 
         #region IDeepCloneable<IPlacement>
 
-        public override IPlacement DeepClone()
+        public override IPlacement SplitClone(int count)
         {
             var clone = new Splitter(Left, Up, Right, Down);
-            PlacementDeepClone(this, clone);
+            PlacementSplitClone(this, clone, count);
             return clone;
         }
 

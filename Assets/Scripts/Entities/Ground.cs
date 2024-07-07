@@ -20,10 +20,10 @@
 
         #region IDeepCloneable<IPlacement>
 
-        public override IPlacement DeepClone()
+        public override IPlacement SplitClone(int count)
         {
             var clone = new Ground();
-            PlacementDeepClone(this, clone);
+            PlacementSplitClone(this, clone, count);
             return clone;
         }
 

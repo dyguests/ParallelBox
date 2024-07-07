@@ -2,6 +2,11 @@
 {
     public interface ISplitCloneable<out T>
     {
-        T SplitClone();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count">要分裂成几份</param>
+        /// <returns></returns>
+        T SplitClone(int count);
     }
 }

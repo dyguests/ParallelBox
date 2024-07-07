@@ -8,7 +8,7 @@ using static Koyou.Commons.RequireEx;
 
 namespace Entities
 {
-    public interface ICell : IRecordable, IEnumerable<IPlacement>, ICloneable<ICell>, IDeepCloneable<ICell>
+    public interface ICell : IRecordable, IEnumerable<IPlacement>, ICloneable<ICell>, ISplitCloneable<ICell>
     {
         void Set(IPlacement placement);
         void Remove(IPlacement placement);
@@ -17,6 +17,8 @@ namespace Entities
         IPlacement Get(int layer);
 
         bool Has(int layer);
+
+        void Splitted(int count);
     }
 
     public class Cell : RecordableObject, ICell
@@ -51,6 +53,11 @@ namespace Entities
 
         public bool Has(int layer) => RequireOrNew(ref _map).ContainsKey(layer);
 
+        public void Splitted(int count)
+        {
+            _map?.Values.ForEach(placement => placement.Splitted(count));
+        }
+
         #endregion
 
         #region IEnumerable<IPlacement>
@@ -83,7 +90,7 @@ namespace Entities
 
         #region IDeepCloneable<ICell>
 
-        public ICell DeepClone()
+        public ICell SplitClone(int count)
         {
             var clone = new Cell();
             if (_map != null)
@@ -91,7 +98,7 @@ namespace Entities
                 clone._map = new Dictionary<int, IPlacement>();
                 foreach (var key in _map.Keys)
                 {
-                    clone._map[key] = _map[key].DeepClone();
+                    clone._map[key] = _map[key].SplitClone(count);
                 }
             }
 

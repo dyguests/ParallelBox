@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Entities
 {
-    public interface IPlate : IRecordable, IDeepCloneable<IPlate>
+    public interface IPlate : IRecordable, ISplitCloneable<IPlate>
     {
         Vector2Int Size { get; }
 
@@ -146,7 +146,7 @@ namespace Entities
             var splitPlates = new List<IPlate>();
             for (var i = 0; i < splitCount - 1; i++)
             {
-                splitPlates.Add(this.DeepClone());
+                splitPlates.Add(this.SplitClone(splitCount));
             }
 
             var enumerator = splittableDirections.GetEnumerator();
@@ -156,6 +156,7 @@ namespace Entities
                 {
                     var direction = enumerator.Current;
                     Move(startPos, startPos + direction, movement);
+                    Splitted(splitCount);
                 }
 
                 foreach (var splitPlate in splitPlates)
@@ -171,6 +172,18 @@ namespace Entities
             }
 
             return splitPlates;
+        }
+
+        /// <summary>
+        /// TODO FIXME
+        /// </summary>
+        /// <param name="count"></param>
+        private void Splitted(int count)
+        {
+            Size.GetEnumerator()
+                .Select(pos => Cells.Get(pos))
+                .Where(Predicates.NotNull)
+                .ForEach(cell => cell.Splitted(count));
         }
 
         public bool Contains(Vector2Int pos) => Size.Contains(pos);
@@ -221,10 +234,10 @@ namespace Entities
 
         #region IDeepCloneable<IPlate>
 
-        public IPlate DeepClone()
+        public IPlate SplitClone(int count)
         {
             var clone = new Plate(Size);
-            this.Size.ForEach(pos => { clone.Cells[pos.x, pos.y] = this.Cells[pos.x, pos.y]?.DeepClone(); });
+            this.Size.ForEach(pos => { clone.Cells[pos.x, pos.y] = this.Cells[pos.x, pos.y]?.SplitClone(count); });
             return clone;
         }
 
