@@ -156,6 +156,12 @@ namespace Entities
             if (splitter == null) return new List<IPlate>();
 
             var splittableDirections = splitter.GetSplitDirections()
+                // todo test
+                .Select(direction =>
+                {
+                    Log.N($"splittableDirections: {direction}");
+                    return direction;
+                })
                 .Where(direction => Get(movement.Pos + direction).None(placement => placement.Layer == movement.Layer))
                 .ToList();
 
