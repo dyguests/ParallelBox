@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Entities;
 using Koyou.Commons;
 using Koyou.Frameworks;
@@ -14,7 +15,12 @@ namespace Scenes.Games.Views
         {
             await base.LoadData(data);
             // todo ApplyChange isCompleted
-            await plateView.LoadData(Data.Plates[0] /*todo 之后改成兼容多个*/);
+
+            foreach (var plate in Data.Plates)
+            {
+                await InsertPlateViewport(plate);
+            }
+
             gameInput.callback = new InputCallback(this);
             gameInput.ActiveInput();
         }
@@ -23,7 +29,12 @@ namespace Scenes.Games.Views
         {
             gameInput.InactiveInput();
             gameInput.callback = null;
-            await plateView.UnloadData();
+
+            foreach (var plate in Data.Plates)
+            {
+                await RemovePlateViewport(plate);
+            }
+
             await base.UnloadData();
         }
 
@@ -33,7 +44,20 @@ namespace Scenes.Games.Views
 
         [SerializeField] private GameInput gameInput;
 
-        [Space] [SerializeField] private PlateView plateView;
+        private readonly Dictionary<IPlate, PlateViewport> _plateViewports = new();
+
+        private async UniTask InsertPlateViewport(IPlate plate)
+        {
+            var plateViewport = await PlateViewport.Generate(plate, this);
+            _plateViewports.Add(plate, plateViewport);
+        }
+
+        private async UniTask RemovePlateViewport(IPlate plate)
+        {
+            var plateViewport = _plateViewports[plate];
+            _plateViewports.Remove(plate);
+            await plateViewport.Delete();
+        }
 
         private class InputCallback : GameInput.ICallback
         {

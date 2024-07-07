@@ -8,6 +8,10 @@
 git clone --recurse-submodules git@github.com:dyguests/ParallelBox.git
 ```
 
+# Todo List
+
+- [ ] undo/redo.
+
 # Reference
 
 - [2024 CiGA Game Jam 48小时极限游戏开发](https://www.gmhub.com/jams/cgj2024)
