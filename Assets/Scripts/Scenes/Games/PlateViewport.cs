@@ -66,26 +66,43 @@ namespace Scenes.Games
         {
             Debug.Assert(count > 0);
 
+            if (count <= 0) return;
+
             if (count == 1)
             {
                 camera.rect = new Rect(0, 0, 1, 1);
                 return;
             }
 
+            if (count == 2)
+            {
+                float width = 1f / 2;
+                camera.rect = new Rect(index * width, 0, width, 1);
+                return;
+            }
+
             // 计算行列数
-            int rows = Mathf.CeilToInt(Mathf.Sqrt(count));
-            int cols = Mathf.CeilToInt((float)count / rows);
+            int cols = Mathf.CeilToInt(Mathf.Sqrt(count));
+            int rows = Mathf.CeilToInt((float)count / cols);
 
-            // 计算每个视口的宽度和高度
-            float width = 1f / cols;
-            float height = 1f / rows;
+            // 如果行数大于列数，交换行和列，优先水平分割
+            if (rows > cols)
+            {
+                (rows, cols) = (cols, rows);
+            }
 
-            // 计算当前视口的行和列位置
-            int row = index / cols;
-            int col = index % cols;
+            {
+                // 计算每个视口的宽度和高度
+                float width = 1f / cols;
+                float height = 1f / rows;
 
-            // 设置摄像机的视口
-            camera.rect = new Rect(col * width, 1 - (row + 1) * height, width, height);
+                // 计算当前视口的行和列位置
+                int row = index / cols;
+                int col = index % cols;
+
+                // 设置摄像机的视口
+                camera.rect = new Rect(col * width, 1 - (row + 1) * height, width, height);
+            }
         }
 
         #endregion
