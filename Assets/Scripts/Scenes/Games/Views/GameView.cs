@@ -151,6 +151,28 @@ namespace Scenes.Games.Views
                 AppStateMachine.Instance.EnqueueState(new GameAppState(game));
             }
 
+            public void Undo()
+            {
+                return;
+                
+                var data = _owner.Data;
+                if (data.Undoable())
+                {
+                    data.Undo();
+                }
+            }
+
+            public void Redo()
+            {
+                return;
+
+                var data = _owner.Data;
+                if (data.Redoable())
+                {
+                    data.Redo();
+                }
+            }
+
             #endregion
 
             #region InputCallback

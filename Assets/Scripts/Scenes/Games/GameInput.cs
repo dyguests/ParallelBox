@@ -17,6 +17,8 @@ namespace Scenes.Games
 
             _gameActions.Move.AddObserver(Move);
             _gameActions.Restart.AddObserver(Restart);
+            _gameActions.Undo.AddObserver(Undo);
+            _gameActions.Redo.AddObserver(Redo);
         }
 
         #endregion
@@ -70,10 +72,28 @@ namespace Scenes.Games
             }
         }
 
+        private void Undo(InputAction.CallbackContext ctx)
+        {
+            if (ctx.phase == InputActionPhase.Performed)
+            {
+                callback?.Undo();
+            }
+        }
+
+        private void Redo(InputAction.CallbackContext ctx)
+        {
+            if (ctx.phase == InputActionPhase.Performed)
+            {
+                callback?.Redo();
+            }
+        }
+
         public new interface ICallback : CommonInput.ICallback
         {
             void Move(Vector2Int direction);
             void Restart();
+            void Undo();
+            void Redo();
         }
 
         #endregion
