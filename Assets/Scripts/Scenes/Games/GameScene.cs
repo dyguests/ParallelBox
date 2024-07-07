@@ -21,6 +21,9 @@ namespace Scenes.Games
             }
 
             var index = GamePrefs.CurrentLevelIndex;
+
+            index = 2; // todo test
+
             Game = GameDatas.GetLevel(index);
             RunSceneFlow();
 #endif
