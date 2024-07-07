@@ -52,7 +52,7 @@ namespace Scenes.Games
 
         [SerializeField] [CanBeNull] private SpriteRenderer sr;
 
-        [SerializeField] [CanBeNull] private Text ratioTExt;
+        [Space] [SerializeField] [CanBeNull] private Text ratioTExt;
 
         protected PlateView PlateView { get; set; }
 
