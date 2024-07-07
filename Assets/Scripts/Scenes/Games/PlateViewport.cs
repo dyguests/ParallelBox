@@ -62,6 +62,18 @@ namespace Scenes.Games
             Destroy(gameObject);
         }
 
+        public async UniTask RearrangeViewport(int index, int count)
+        {
+            if (count == 1)
+            {
+                camera.rect = new Rect(0, 0, 1, 1);
+                return;
+            }
+
+            var width = 1f / count;
+            camera.rect = new Rect(width * index, 0, width, 1);
+        }
+
         #endregion
     }
 }

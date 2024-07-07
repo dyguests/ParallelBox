@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a386c9a899224a388d830d32e9e132e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 8386143320108233685}
   plateView: {fileID: 3528507274410434624}
 --- !u!1 &1143662149357940277
 GameObject:

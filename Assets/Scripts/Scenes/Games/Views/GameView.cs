@@ -17,7 +17,7 @@ namespace Scenes.Games.Views
         public override async UniTask LoadData(IGame data)
         {
             await base.LoadData(data);
-            _disperser = Data.Collect<IGame>(ApplyChange);
+            _disperser = Data.Collect<IGame>(async (game, current, list) => await ApplyChange(game, current, list));
 
             PlateViewport.Id = 0;
             foreach (var plate in Data.Plates)
@@ -53,7 +53,7 @@ namespace Scenes.Games.Views
 
         private readonly Dictionary<IPlate, PlateViewport> _plateViewports = new();
 
-        private void ApplyChange(IGame previous, IGame current, List<ITransition> transitions)
+        private async UniTask ApplyChange(IGame previous, IGame current, List<ITransition> transitions)
         {
             var hasViewportChanged = false;
             foreach (var transition in transitions ?? new List<ITransition>())
@@ -64,7 +64,7 @@ namespace Scenes.Games.Views
                     {
                         foreach (var plate in addPlatesTransition.Plates)
                         {
-                            InsertPlateViewport(plate).Forget();
+                            await InsertPlateViewport(plate);
                             hasViewportChanged = true;
                         }
 
@@ -76,7 +76,19 @@ namespace Scenes.Games.Views
 
             if (hasViewportChanged)
             {
-                
+                await RearrangePlateViewports();
+            }
+        }
+
+        private async UniTask RearrangePlateViewports()
+        {
+            var plates = Data.Plates.ToArray();
+            var count = plates.Length;
+            for (var i = 0; i < count; i++)
+            {
+                var plate = plates[i];
+                var plateViewport = _plateViewports[plate];
+                await plateViewport.RearrangeViewport(i, count);
             }
         }
 
