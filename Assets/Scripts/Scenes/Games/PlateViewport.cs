@@ -50,6 +50,7 @@ namespace Scenes.Games
 
         #region PlateViewport
 
+        [SerializeField] private new Camera camera;
         [SerializeField] private PlateView plateView;
 
         public GameView GameView { get; set; }

@@ -38,6 +38,7 @@ namespace Scenes.Games.Views
             {
                 await RemovePlateViewport(plate);
             }
+
             PlateViewport.Id = 0;
 
             _disperser.Disperse();
@@ -54,24 +55,28 @@ namespace Scenes.Games.Views
 
         private void ApplyChange(IGame previous, IGame current, List<ITransition> transitions)
         {
-            if (transitions != null)
+            var hasViewportChanged = false;
+            foreach (var transition in transitions ?? new List<ITransition>())
             {
-                foreach (var transition in transitions)
+                switch (transition)
                 {
-                    switch (transition)
+                    case Game.AddPlatesTransition addPlatesTransition:
                     {
-                        case Game.AddPlatesTransition addPlatesTransition:
+                        foreach (var plate in addPlatesTransition.Plates)
                         {
-                            foreach (var plate in addPlatesTransition.Plates)
-                            {
-                                InsertPlateViewport(plate).Forget();
-                            }
-
-                            break;
+                            InsertPlateViewport(plate).Forget();
+                            hasViewportChanged = true;
                         }
-                        default: break;
+
+                        break;
                     }
+                    default: break;
                 }
+            }
+
+            if (hasViewportChanged)
+            {
+                
             }
         }
 
